@@ -1,0 +1,160 @@
+
+{% block content %}
+<style>
+  /* 页面整体布局 */
+  .listings-page {
+    display: flex;
+    justify-content: center;
+    background: #f2f2f2;
+    padding: 40px 20px;
+  }
+  .listings-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    max-width: 1000px;
+    width: 100%;
+    padding: 30px 40px;
+    box-sizing: border-box;
+  }
+  /* 顶部导航：Back, Title, Create */
+  .listings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .listings-header h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333333;
+    margin: 0;
+  }
+  .btn-back, .btn-create {
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  .btn-back { background: #9e9e9e; }
+  .btn-back:hover { background: #757575; }
+  .btn-create { background: #56ab2f; }
+  .btn-create:hover { background: #419c22; }
+  /* 搜索栏 */
+  .search-bar {
+    display: flex;
+    margin-bottom: 24px;
+  }
+  .search-bar input {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    background: #f2f2f2;
+    font-size: 1rem;
+    color: #555;
+  }
+  .search-bar button {
+    padding: 0 20px;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    background: #ffffff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .search-bar button:hover { background: #f0f0f0; }
+  /* 表格：绿色渐变表头 + 斑马 */
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .table thead th {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+    color: #ffffff;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border: none;
+  }
+  .table tbody tr:nth-child(odd) { background: #f9fff4; }
+  .table tbody tr:nth-child(even) { background: #ffffff; }
+  .table td {
+    padding: 12px;
+    color: #333333;
+    border: none;
+  }
+  /* 操作按钮 */
+  .btn-secondary, .btn-danger {
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    color: #fff;
+    text-decoration: none;
+    margin-right: 8px;
+    transition: background 0.3s ease;
+  }
+  .btn-secondary { background: #9e9e9e; }
+  .btn-secondary:hover { background: #757575; }
+  .btn-danger { background: #e74c3c; }
+  .btn-danger:hover { background: #c0392b; }
+</style>
+
+<div class="listings-page">
+  <div class="listings-card">
+    <div class="listings-header">
+      <a href="{{ url_for('web.dashboard_page') }}" class="btn-back">← Back to Dashboard</a>
+      <h2>My Service Listings</h2>
+      <a href="{{ url_for('cleaner.create_service_listing_page') }}" class="btn-create">Create Service Listing</a>
+    </div>
+
+    <form method="get" action="{{ url_for('cleaner.list_service_listings_page') }}" class="search-bar">
+      <input type="text" name="q" placeholder="Search listings…" value="{{ q or '' }}" />
+      <button type="submit">Search</button>
+      {% if q %}
+        <a href="{{ url_for('cleaner.list_service_listings_page') }}" class="btn btn-secondary">Clear</a>
+      {% endif %}
+    </form>
+
+    {% if listings %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Listing ID</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for l in listings %}
+            <tr>
+              <td>{{ l.listing_id }}</td>
+              <td>{{ l.description }}</td>
+              <td>{{ l.price }}</td>
+              <td>{{ l.category.name }}</td>
+              <td>
+                <a href="{{ url_for('cleaner.edit_service_listing_page', listing_id=l.listing_id) }}" class="btn-secondary">Edit</a>
+                <form method="post" action="{{ url_for('cleaner.delete_service_listing_page', listing_id=l.listing_id) }}" style="display:inline" onsubmit="return confirm('Are you sure?');">
+                  <button type="submit" class="btn-danger">Delete</button>
+                </form>
+                <a href="{{ url_for('cleaner.view_service_listing_page', listing_id=l.listing_id) }}"class="btn-secondary">View Details</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No service listings found.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

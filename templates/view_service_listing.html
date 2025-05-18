@@ -1,0 +1,98 @@
+
+{% block content %}
+<style>
+  /* 详情页卡片式布局 */
+  .detail-page {
+    display: flex;
+    justify-content: center;
+    background: #f2f2f2;
+    padding: 40px 20px;
+  }
+  .detail-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    max-width: 700px;
+    width: 100%;
+    padding: 30px 40px;
+    box-sizing: border-box;
+  }
+  /* 顶部导航：Back, Title, 占位 */
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .detail-header h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333333;
+    margin: 0;
+  }
+  .btn-back {
+    background: #9e9e9e;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  .btn-back:hover { background: #757575; }
+  .header-spacer { width: 90px; }
+  /* 描述列表 */
+  .detail-list {
+    margin: 0;
+    padding: 0;
+  }
+  .detail-list dt {
+    font-weight: 500;
+    color: #555;
+    padding: 8px 0;
+  }
+  .detail-list dd {
+    margin: 0 0 16px 0;
+    color: #333;
+    padding-left: 0;
+  }
+</style>
+
+<div class="detail-page">
+  <div class="detail-card">
+    <div class="detail-header">
+      <h2>Listing #{{ listing.listing_id }}</h2>
+      <div class="header-spacer"></div>
+    </div>
+
+    <dl class="row detail-list">
+      <dt class="col-sm-4">Description</dt>
+      <dd class="col-sm-8">{{ listing.description }}</dd>
+
+      <dt class="col-sm-4">Price</dt>
+      <dd class="col-sm-8">${{ '%.2f'|format(listing.price) }}</dd>
+
+      <dt class="col-sm-4">Category</dt>
+      <dd class="col-sm-8">{{ listing.category.name }}</dd>
+
+      <dt class="col-sm-4">Number of Views</dt>
+      <dd class="col-sm-8">{{ views }}</dd>
+
+      <dt class="col-sm-4">Number of Shortlist</dt>
+      <dd class="col-sm-8">{{ shortlist }}</dd>
+
+      {% if listing.phone %}
+      <dt class="col-sm-4">Contact Phone</dt>
+      <dd class="col-sm-8">{{ listing.cleaner.phone }}</dd>
+      {% endif %}
+    </dl>
+
+    <div style="text-align: center; margin-top: 24px;">
+      <a href="{{ url_for('cleaner.list_service_listings_page') }}" class="btn-back">← Back to My Listings</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

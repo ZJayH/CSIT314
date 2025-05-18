@@ -1,0 +1,131 @@
+
+{% block content %}
+<style>
+  /* 页面整体布局 */
+  .reports-page {
+    display: flex;
+    justify-content: center;
+    background: #f2f2f2;
+    padding: 40px 20px;
+  }
+  .reports-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    max-width: 800px;
+    width: 100%;
+    padding: 30px 40px;
+    box-sizing: border-box;
+  }
+  /* 标题 */
+  .reports-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333333;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  /* 报表区段 */
+  .report-section {
+    margin-bottom: 32px;
+  }
+  .report-section h4 {
+    margin-bottom: 16px;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  .report-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .report-form .form-select {
+    flex: 1;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 4px;
+    background: #f2f2f2;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  .btn-download {
+    background: #56ab2f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .btn-download:hover { background: #419c22; }
+  /* 返回按钮 */
+  .btn-back {
+    background: #9e9e9e;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s ease;
+  }
+  .btn-back:hover { background: #757575; }
+  .back-container {
+    text-align: center;
+    margin-top: 24px;
+  }
+</style>
+
+<div class="reports-page">
+  <div class="reports-card">
+    <h2 class="reports-title">Select and Download Reports</h2>
+
+    <div class="report-section">
+      <h4>Daily Report</h4>
+      <form class="report-form" method="get" action="{{ url_for('web.download_daily_report') }}">
+        <select name="date" class="form-select">
+          <option value="">Latest</option>
+          {% for d in dates %}
+            <option value="{{ d }}">{{ d }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn-download">Download</button>
+      </form>
+    </div>
+
+    <div class="report-section">
+      <h4>Weekly Report</h4>
+      <form class="report-form" method="get" action="{{ url_for('web.download_weekly_report') }}">
+        <select name="week_start" class="form-select">
+          <option value="">Latest</option>
+          {% for w in weeks %}
+            <option value="{{ w }}">{{ w }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn-download">Download</button>
+      </form>
+    </div>
+
+    <div class="report-section">
+      <h4>Monthly Report</h4>
+      <form class="report-form" method="get" action="{{ url_for('web.download_monthly_report') }}">
+        <select name="month" class="form-select">
+          <option value="">Latest</option>
+          {% for m in months %}
+            <option value="{{ m }}">{{ m }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn-download">Download</button>
+      </form>
+    </div>
+
+    <div class="back-container">
+      <a href="{{ url_for('web.dashboard_page') }}" class="btn-back">← Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

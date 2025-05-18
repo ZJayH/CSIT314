@@ -1,0 +1,88 @@
+
+{% block content %}
+<style>
+  /* Match Detail 页面统一卡片布局 */
+  .match-page {
+    display: flex;
+    justify-content: center;
+    background: #f2f2f2;
+    padding: 40px 20px;
+  }
+  .match-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    max-width: 700px;
+    width: 100%;
+    padding: 30px 40px;
+    box-sizing: border-box;
+  }
+  /* 顶部导航：Back, Title, 占位 */
+  .match-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .match-header h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333333;
+    margin: 0;
+  }
+  .btn-back {
+    background: #9e9e9e;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  .btn-back:hover { background: #757575; }
+  .header-spacer { width: 90px; }
+  /* 描述列表 */
+  .detail-list dt {
+    font-weight: 500;
+    color: #555;
+    padding: 8px 0;
+  }
+  .detail-list dd {
+    margin: 0 0 16px 0;
+    color: #333;
+    padding-left: 0;
+  }
+</style>
+
+<div class="match-page">
+  <div class="match-card">
+    <div class="match-header">
+      <h2>Match #{{ match.match_id }}</h2>
+      <div class="header-spacer"></div>
+    </div>
+
+    <dl class="row detail-list">
+      <dt class="col-sm-4">Homeowner</dt>
+      <dd class="col-sm-8">{{ match.homeowner.name }}</dd>
+
+      <dt class="col-sm-4">Listing Description</dt>
+      <dd class="col-sm-8">{{ match.listing.description }}</dd>
+
+      <dt class="col-sm-4">Category</dt>
+      <dd class="col-sm-8">{{ match.listing.category.name }}</dd>
+
+      <dt class="col-sm-4">Confirmed Date</dt>
+      <dd class="col-sm-8">{{ match.confirmed_date.strftime('%Y-%m-%d') }}</dd>
+
+      {# can add more fields here #}
+    </dl>
+
+    <div style="text-align: center; margin-top: 24px;">
+      <a href="{{ url_for('cleaner.list_confirmed_matches_page') }}" class="btn-back">← Back to Matches</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

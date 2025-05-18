@@ -1,0 +1,38 @@
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="mb-3">
+      <a href="{{ url_for('homeowner.list_shortlisted_page') }}" class="btn btn-secondary">
+        ← Back to My Shortlist
+      </a>
+    </div>
+
+    <h2 class="mb-4">Listing #{{ listing.listing_id }}</h2>
+
+    <dl class="row">
+      <dt class="col-sm-4">Description</dt>
+      <dd class="col-sm-8">{{ listing.description }}</dd>
+
+      <dt class="col-sm-4">Price</dt>
+      <dd class="col-sm-8">${{ '%.2f'|format(listing.price) }}</dd>
+
+      <dt class="col-sm-4">Category</dt>
+      <dd class="col-sm-8">{{ listing.category.name }}</dd>
+
+      <dt class="col-sm-4">Cleaner</dt>
+      <dd class="col-sm-8">{{ listing.cleaner.name }}</dd>
+
+      <dt class="col-sm-4">Cleaner Email</dt>
+      <dd class="col-sm-8">{{ listing.cleaner.email }}</dd>
+
+      {% if listing.cleaner.phone %}
+        <dt class="col-sm-4">Cleaner Phone</dt>
+        <dd class="col-sm-8">{{ listing.cleaner.phone }}</dd>
+      {% endif %}
+
+      
+    </dl>
+  </div>
+</div>
+{% endblock %}

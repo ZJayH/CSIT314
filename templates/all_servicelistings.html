@@ -1,0 +1,183 @@
+
+
+{% block content %}
+<style>
+  .browse-page {
+    display: flex;
+    justify-content: center;
+    background: #f2f2f2;
+    padding: 40px 20px;
+  }
+  .browse-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    max-width: 900px;
+    width: 100%;
+    padding: 30px 40px;
+    box-sizing: border-box;
+  }
+  .browse-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .browse-header h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333333;
+    margin: 0;
+  }
+  .btn-back, .btn-create {
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  .btn-back {
+    background: #9e9e9e;
+  }
+  .btn-back:hover {
+    background: #757575;
+  }
+  .btn-create {
+    background: #56ab2f;
+  }
+  .btn-create:hover {
+    background: #419c22;
+  }
+  .search-bar {
+    display: flex;
+    margin-bottom: 24px;
+  }
+  .search-bar input {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    background: #f2f2f2;
+    font-size: 1rem;
+    color: #555;
+  }
+  .search-bar button {
+    padding: 0 20px;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    background: #ffffff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .search-bar button:hover {
+    background: #f0f0f0;
+  }
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .table thead th {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+    color: #ffffff;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border: none;
+  }
+  .table tbody tr:nth-child(odd) {
+    background: #f9fff4;
+  }
+  .table tbody tr:nth-child(even) {
+    background: #ffffff;
+  }
+  .table td {
+    padding: 12px;
+    color: #333333;
+    border: none;
+  }
+  .btn-action {
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    color: #fff;
+    text-decoration: none;
+    margin-right: 8px;
+    transition: background 0.3s ease;
+  }
+  .btn-action-success {
+    background: #56ab2f;
+  }
+  .btn-action-success:hover {
+    background: #419c22;
+  }
+  .btn-action-warning {
+    background: #ffb74d;
+  }
+  .btn-action-warning:hover {
+    background: #ffa726;
+  }
+</style>
+
+<div class="browse-page">
+  <div class="browse-card">
+    <div class="browse-header">
+      <a href="{{ url_for('web.dashboard_page') }}" class="btn-back">← Back to Dashboard</a>
+      <h2>Browse Service Listings</h2>
+      <a href="{{ url_for('homeowner.view_shortlist') }}" class="btn-create">View My Shortlisted</a>
+    </div>
+
+    <form method="get" action="{{ url_for('homeowner.list_service_listings_page') }}" class="search-bar">
+      <input type="text" name="q" placeholder="Search listings…" value="{{ q or '' }}" />
+      <button type="submit">Search</button>
+      {% if q %}
+        <a href="{{ url_for('homeowner.list_service_listings_page') }}" class="btn btn-secondary btn-sm">Clear</a>
+      {% endif %}
+    </form>
+
+    {% if listings %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for l in listings %}
+            <tr>
+              <td>{{ l.listing_id }}</td>
+              <td>{{ l.description }}</td>
+              <td>{{ l.category.name }}</td>
+                <td>
+                <form method="post" action="{{ url_for('homeowner.toggle_shortlist', listing_id=l.listing_id) }}" style="display:inline;">
+                  {% if l.listing_id in shortlisted_ids %}
+                    <button type="submit" class="btn-action btn-action-warning">Remove from Shortlist</button>
+                  {% else %}
+                    <button type="submit" class="btn-action btn-action-success">Add to Shortlist</button>
+                  {% endif %}
+                </form>
+                <a href="{{ url_for('homeowner.view_service_listing_page', listing_id=l.listing_id) }}" class="btn-action btn-action-success">View Details</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No service listings found.</p>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 24px;">
+      <a href="{{ url_for('web.dashboard_page') }}" class="btn-back">← Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

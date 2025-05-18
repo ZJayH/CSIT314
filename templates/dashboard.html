@@ -1,0 +1,102 @@
+{% block content %}
+<style>
+  /* Dashboard page styling, 延续 Login 样式 */
+  .dashboard-page {
+    min-height: 100vh;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+  }
+  .dashboard-card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    max-width: 900px;
+    margin: auto;
+    padding: 30px 40px;
+  }
+  .dashboard-card h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 24px;
+  }
+  .dashboard-lead {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  .dashboard-actions {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .dashboard-actions li {
+    margin: 0;
+  }
+  .dashboard-actions .btn {
+    font-size: 0.95rem;
+    padding: 10px 16px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  .btn-create { background: #56ab2f; color: #fff; }
+  .btn-create:hover { background: #419c22; }
+  .btn-manage { background: #2575fc; color: #fff; }
+  .btn-manage:hover { background: #1f6fd8; }
+  .btn-warning { background: #ffb74d; color: #fff; }
+  .btn-warning:hover { background: #ffa726; }
+  .btn-secondary { background: #9e9e9e; color: #fff; }
+  .btn-secondary:hover { background: #757575; }
+  .logout-btn { border: none; background: transparent; color: #555; padding: 8px 12px; }
+  .logout-btn:hover { color: #333; }
+</style>
+
+<div class="dashboard-page">
+  <div class="dashboard-card">
+    <h2>Dashboard</h2>
+
+    {% if session.role == 'user admin' %}
+      <p class="dashboard-lead">👑 You are a User Admin. You can manage user accounts, view reports, and configure roles.</p>
+      <ul class="dashboard-actions">
+        <li><a href="{{ url_for('web.list_accounts_page') }}" class="btn btn-manage">Manage User Accounts</a></li>
+        <li><a href="{{ url_for('web.list_profiles_page') }}" class="btn btn-warning">Manage Roles</a></li>
+      </ul>
+
+    {% elif session.role == 'platform manager' %}
+      <p class="dashboard-lead">🔧 You are a Platform Manager. You can manage categories and review services.</p>
+      <ul class="dashboard-actions">
+        <li><a href="{{ url_for('web.list_categories_page') }}" class="btn btn-manage">Manage Service Categories</a></li>
+        <li><a href="{{ url_for('web.reports_page') }}" class="btn btn-secondary">Review Reports</a></li>
+      </ul>
+
+    {% elif session.role == 'cleaner' %}
+      <p class="dashboard-lead">🧹 You are a Cleaner. View your service orders below:</p>
+      <ul class="dashboard-actions">
+        <li><a href="{{ url_for('cleaner.list_service_listings_page') }}" class="btn btn-manage">My Services</a></li>
+        <li><a href="{{ url_for('cleaner.list_confirmed_matches_page') }}" class="btn btn-warning">My Confirmed Matches</a></li>
+      </ul>
+
+    {% elif session.role == 'homeowner' %}
+      <p class="dashboard-lead">🏠 You are a Homeowner. Welcome to the Homeowner Dashboard:</p>
+      <ul class="dashboard-actions">
+        <li><a href="{{ url_for('homeowner.list_service_listings_page') }}" class="btn btn-manage">View Cleaning Services</a></li>
+        <li><a href="{{ url_for('homeowner.view_shortlist') }}" class="btn btn-warning">My Shortlist</a></li>
+        <li><a href="{{ url_for('homeowner.service_history_page') }}" class="btn btn-secondary">My Service History</a></li>
+      </ul>
+
+    {% else %}
+      <p class="text-warning">Unknown role. Displaying default dashboard.</p>
+    {% endif %}
+
+    <p>
+      <a href="{{ url_for('web.logout_page') }}" class="logout-btn">Logout</a>
+    </p>
+  </div>
+</div>
+
+{% endblock %}
